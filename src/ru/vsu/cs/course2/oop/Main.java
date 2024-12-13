@@ -7,7 +7,11 @@ import ru.vsu.cs.course2.oop.order.OrderException;
 import ru.vsu.cs.course2.oop.product.Food;
 import ru.vsu.cs.course2.oop.product.Item;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.TreeSet;
 
 public class Main {
     public static void main(String[] args) {
@@ -56,7 +60,9 @@ public class Main {
         Order orderItem1 = new Order(it, 1, "Stariy Oskol"); // не создается даже в качестве заказа
         System.out.println(orderItem1.startDelivery(LocalDate.of(2024, 11, 10).atStartOfDay()));
 
+        System.out.println();
         // Тест exception'а
+        System.out.println("----- Тест exception -----");
         Item it3 = new Item("Laptop3", 700_007, "UltraOmegaGamingLaptop7Z7Z", 3);
         Order orderIt3 = new Order(it3, -2, "HEHEHAW");
         try {
@@ -64,5 +70,16 @@ public class Main {
         } catch (OrderException e) {
             System.out.println(e.getMessage());
         }
+
+        System.out.println();
+        //Тест duration и localdatetime + period + duration
+        System.out.println("----- Тест LocalDateTime -----");
+        Item it4 = new Item("Laptop4", 4444, "UltraOmegaGamingLaptop4444", 4);
+        Order orderIt4 = new Order(it4, 2, "Toilet");
+        Delivery orderIt4Delivery = orderIt4.startDelivery("21-12-2025 18:00");
+        System.out.println("Months of warranty " + it4.getMonthsOfWarranty().getMonths());
+        System.out.println(orderIt4Delivery);
+        System.out.println(orderIt4Delivery.getDeliveryTimeDeadline().format(Delivery.DATE_FORMATTER));
+        System.out.println(orderIt4Delivery.timeUntilDeadline().toDaysPart() + ":"+ orderIt4Delivery.timeUntilDeadline().toHoursPart() + ":" + orderIt4Delivery.timeUntilDeadline().toMinutesPart());
     }
 }

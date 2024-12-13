@@ -82,6 +82,15 @@ public class Order {
         return null;
     }
 
+    public Delivery startDelivery(String deliveryTimeDeadline) {
+        try {
+            return new Delivery(this, deliveryTimeDeadline);
+        } catch (DeliveryException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
     public void validateOrder() throws OrderException {
         if (this.getQuantity() <= 0) {
             throw new OrderException("Order amount must be greater than zero.");

@@ -2,7 +2,9 @@ package ru.vsu.cs.course2.oop.delivery;
 
 import ru.vsu.cs.course2.oop.order.Order;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Delivery {
@@ -11,6 +13,7 @@ public class Delivery {
     private LocalDateTime deliveryTimeDeadline;
     private static String deliveryService;
     long trackingNumber;
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     @Override
     public boolean equals(Object o) {
@@ -56,6 +59,31 @@ public class Delivery {
         this.trackingNumber = System.currentTimeMillis();
         System.out.printf("Your TN: %d. Delivery in progress\n", trackingNumber);
         order.setStatus("In progress");
+    }
+
+    public Delivery(Order order, String deliveryTimeDeadline) throws DeliveryException {
+        this.order = order;
+        this.deliveryTimeDeadline = LocalDateTime.parse(deliveryTimeDeadline, DATE_FORMATTER);
+        this.createdAt = LocalDateTime.now();
+//        if (!this.createdAt.isBefore(deliveryTimeDeadline) || order.getStatus().equals("Cancelled") || order.getStatus().equals("In progress")) {
+//            System.out.println("There was a problem processing ur order");
+//            order.setStatus("Cancelled");
+//            return;
+//        }
+        if (!this.createdAt.isBefore(this.deliveryTimeDeadline) || order.getStatus().equals("Cancelled") || order.getStatus().equals("In progress")) {
+            order.setStatus("Cancelled");
+            throw new DeliveryException("There was a problem processing your order. Order status: " + order.getStatus());
+        }
+        this.trackingNumber = System.currentTimeMillis();
+        System.out.printf("Your TN: %d. Delivery in progress\n", trackingNumber);
+        order.setStatus("In progress");
+    }
+
+    public Duration timeUntilDeadline() {
+        if (deliveryTimeDeadline.isBefore(createdAt)) {
+            System.out.println("Deadline cannot be before the order date.");
+        }
+        return Duration.between(LocalDateTime.now(), deliveryTimeDeadline);
     }
 
     public static String getDeliveryService() {

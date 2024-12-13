@@ -1,7 +1,10 @@
 package ru.vsu.cs.course2.oop.product;
 
+import java.time.Duration;
+import java.time.Period;
+
 public class Item extends Product implements iAdditionalProductInfo {
-    private int monthsOfWarranty = 6;
+    private Period monthsOfWarranty = Period.ofMonths(6);
     private static float taxRate = 0.1f;
 
     @Override
@@ -13,7 +16,7 @@ public class Item extends Product implements iAdditionalProductInfo {
 
     @Override
     public float getUnitPrice() {
-        return monthsOfWarranty > 12 ? super.getPrice() * (1 + taxRate) : super.getPrice();
+        return monthsOfWarranty.getMonths() > 12 ? super.getPrice() * (1 + taxRate) : super.getPrice();
     }
 
     @Override
@@ -23,7 +26,7 @@ public class Item extends Product implements iAdditionalProductInfo {
 
     public Item(String name, int price, String description, int quantity, int monthsOfWarranty) {
         super(name, price, description, quantity);
-        this.monthsOfWarranty = monthsOfWarranty;
+        this.monthsOfWarranty = Period.ofMonths(monthsOfWarranty);
     }
 
     public Item(String name, int price, String description, int quantity) {
@@ -41,11 +44,11 @@ public class Item extends Product implements iAdditionalProductInfo {
     public static void setTaxRate(float taxRate) {
         Item.taxRate = taxRate;
     }
-    public int getMonthsOfWarranty() {
+    public Period getMonthsOfWarranty() {
         return monthsOfWarranty;
     }
 
-    public void setMonthsOfWarranty(int monthsOfWarranty) {
+    public void setMonthsOfWarranty(Period monthsOfWarranty) {
         this.monthsOfWarranty = monthsOfWarranty;
     }
 }
