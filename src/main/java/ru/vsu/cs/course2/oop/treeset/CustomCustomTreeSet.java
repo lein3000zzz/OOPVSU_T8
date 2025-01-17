@@ -16,7 +16,6 @@ public class CustomCustomTreeSet<E> implements CustomTreeSetInterface<E> {
     public boolean add(E e) {
         return treeMap.put(e, PRESENT) == null;
     }
-
     @Override
     public boolean addAll(List<? extends E> c) {
         boolean modified = false;
